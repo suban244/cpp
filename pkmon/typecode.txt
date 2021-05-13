@@ -1,0 +1,6 @@
+None 0
+Grass 1
+Fire 2
+Water 3
+Poision 4
+Ground 5

@@ -1,0 +1,4 @@
+Balbasaur Grass None
+Charmander Fire None
+Squartle Water None
+
