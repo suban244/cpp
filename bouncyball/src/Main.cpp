@@ -12,9 +12,14 @@ int main() {
 
   game = new Game();
 
-  while (game->isRunning()) {
+  game->init("Bouncy Ball", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800,
+             640);
+
+  while (game->running()) {
+
     frameStart = SDL_GetTicks();
 
+    game->handleEvents();
     game->update();
     game->render();
 
@@ -25,5 +30,6 @@ int main() {
     }
   }
 
+  std::cout << "clean" << std::endl;
   game->clean();
 }

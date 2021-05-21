@@ -1,8 +1,12 @@
 #include "Game.h"
+#include "BouncyBall.h"
 
 Game::Game() {}
 
 Game::~Game() {}
+
+SDL_Renderer *Game::renderer = nullptr;
+BouncyBall *ball = nullptr;
 
 void Game::init(const char *title, int xpos, int ypos, int width, int height) {
   if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
@@ -10,6 +14,9 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height) {
 
     if (window) {
       SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    } else {
+      std::cout << "Failed to create window" << std::endl;
+      exit(-1);
     }
     renderer = SDL_CreateRenderer(window, -1, 0);
 
@@ -17,12 +24,16 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height) {
     std::cout << "Failed to initialize SDL" << std::endl;
     exit(-1);
   }
+  isRunning = true;
+  ball = new BouncyBall("assets/ball.png", 0.5 * width, 0.9 * height);
 }
 
+bool Game::running() { return isRunning; }
+
 void Game::update() {
-  SDL_DestroyWindow(window);
-  SDL_DestroyRenderer(renderer);
-  SDL_Quit();
+  count++;
+  std::cout << count << std::endl;
+  ball->Update();
 }
 
 void Game::render() {
@@ -30,8 +41,28 @@ void Game::render() {
   SDL_RenderClear(renderer);
 
   // TODO
+  ball->Render();
 
   SDL_RenderPresent(renderer);
 }
 
-void Game::clean() {}
+void Game::handleEvents() {
+  SDL_Event event;
+
+  SDL_PollEvent(&event);
+
+  switch (event.type) {
+  case SDL_QUIT:
+    isRunning = false;
+    break;
+
+  default:
+    break;
+  }
+}
+
+void Game::clean() {
+  SDL_DestroyWindow(window);
+  SDL_DestroyRenderer(renderer);
+  SDL_Quit();
+}
