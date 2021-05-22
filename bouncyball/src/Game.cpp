@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "BouncyBall.h"
+#include "InputHandeler.h"
 
 Game::Game() {}
 
@@ -32,7 +33,6 @@ bool Game::running() { return isRunning; }
 
 void Game::update() {
   count++;
-  std::cout << count << std::endl;
   ball->Update();
 }
 
@@ -42,6 +42,7 @@ void Game::render() {
 
   // TODO
   ball->Render();
+  // ball->printMovement();
 
   SDL_RenderPresent(renderer);
 }
@@ -54,6 +55,18 @@ void Game::handleEvents() {
   switch (event.type) {
   case SDL_QUIT:
     isRunning = false;
+    break;
+
+  case SDL_KEYDOWN:
+    // do stuff
+    // event.key.keysym.sym gets us the ascii value
+    InputHandeler::HandleKeyDown(event.key.keysym.sym, ball);
+    std::cout << event.key.keysym.sym << std::endl;
+    break;
+
+  case SDL_KEYUP:
+    // do stuff
+    InputHandeler::HandleKeyUp(event.key.keysym.sym, ball);
     break;
 
   default:
