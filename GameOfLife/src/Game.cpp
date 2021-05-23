@@ -36,7 +36,7 @@ bool Game::started() { return hasStarted; }
 void Game::update() {
   count++;
   if (hasStarted) {
-    if (count % 20 == 0) {
+    if (count % 10 == 0) {
       // grid->printGrid();
       grid->updateGrid();
     }

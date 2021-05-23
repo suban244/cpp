@@ -114,7 +114,6 @@ void Grid::updateGrid() {
               arr[i + 1][j] + arr[i + 1][j + 1];
       }
 
-      std::cout << sum << std::endl;
       // Do something with the value
       if (arr[i][j] == ALIVE) {
         if (sum == 2 || sum == 3) {
