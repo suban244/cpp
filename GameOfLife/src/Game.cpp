@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Grid.h"
+#include "InputHandeler.h"
 
 Game::Game() {}
 
@@ -25,16 +26,20 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height) {
     exit(-1);
   }
   isRunning = true;
+  hasStarted = false;
   grid = new Grid(width, height);
 }
 
 bool Game::running() { return isRunning; }
+bool Game::started() { return hasStarted; }
 
 void Game::update() {
   count++;
-  if (count % 20 == 0) {
-    grid->printGrid();
-    grid->updateGrid();
+  if (hasStarted) {
+    if (count % 20 == 0) {
+      // grid->printGrid();
+      grid->updateGrid();
+    }
   }
 }
 
@@ -57,11 +62,27 @@ void Game::handleEvents() {
   case SDL_QUIT:
     isRunning = false;
     break;
+  case SDL_MOUSEBUTTONDOWN:
+    InputHandeler::handleMouseClick(event.button.x, event.button.y,
+                                    event.button.button, grid);
+    break;
+
+  case SDL_MOUSEBUTTONUP:
+    break;
+
+  case SDL_KEYDOWN:
+    InputHandeler::handleKeyDown(this, event.key.keysym.sym);
+    break;
+
+  case SDL_KEYUP:
+    break;
 
   default:
     break;
   }
 }
+
+void Game::changeState() { this->hasStarted = !hasStarted; }
 
 void Game::clean() {
   SDL_DestroyWindow(window);

@@ -15,10 +15,14 @@ public:
   bool running();
   void clean();
 
+  bool started();
+  void changeState();
+
   static SDL_Renderer *renderer;
 
 private:
   SDL_Window *window;
   int count = 0;
   bool isRunning;
+  bool hasStarted;
 };

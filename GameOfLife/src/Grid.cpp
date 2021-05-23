@@ -17,7 +17,7 @@ Grid::Grid(int w, int h) {
   std::srand(std::time(nullptr));
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
-      arr[i][j] = std::rand() % 2;
+      arr[i][j] = (START_RANDOM) ? std::rand() % 2 : 0;
     }
   }
   // makeGrid();
@@ -135,6 +135,13 @@ void Grid::updateGrid() {
       arr[i][j] = new_arr[i][j];
     }
   }
+}
+
+void Grid::flipBlock(int i, int j) {
+  if (arr[i][j] == DEAD)
+    arr[i][j] = ALIVE;
+  else if (arr[i][j] == ALIVE)
+    arr[i][j] = DEAD;
 }
 
 Grid::~Grid() {

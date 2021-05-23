@@ -12,8 +12,8 @@ int main() {
 
   game = new Game();
 
-  game->init("Bouncy Ball", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800,
-             640);
+  game->init("Conway Game of Life ", SDL_WINDOWPOS_CENTERED,
+             SDL_WINDOWPOS_CENTERED, 800, 640);
 
   while (game->running()) {
 
