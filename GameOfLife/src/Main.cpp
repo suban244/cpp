@@ -13,7 +13,7 @@ int main() {
   game = new Game();
 
   game->init("Conway Game of Life ", SDL_WINDOWPOS_CENTERED,
-             SDL_WINDOWPOS_CENTERED, 800, 640);
+             SDL_WINDOWPOS_CENTERED, 1280, 720);
 
   while (game->running()) {
 
