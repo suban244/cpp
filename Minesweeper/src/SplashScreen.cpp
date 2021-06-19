@@ -40,11 +40,11 @@ int SplashScreen::handleMouseClick(SDL_Event event) {
   }
   if (x > medium.x && x < (medium.x + medium.w) && y > medium.y &&
       y < (medium.y + medium.w)) {
-    return EASY_DIFFICULTY;
+    return MEDIUM_DIFFICULTY;
   }
   if (x > hard.x && x < (hard.x + hard.w) && y > hard.y &&
       y < (hard.y + hard.w)) {
-    return EASY_DIFFICULTY;
+    return HARD_DIFFICULTY;
   }
   return 0;
 }

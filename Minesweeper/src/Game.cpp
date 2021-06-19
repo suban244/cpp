@@ -81,6 +81,8 @@ void Game::handleEvents() {
         }
       }
     } else {
+      // Grid handles the input
+      grid->handleMouseClick(event);
     }
     break;
 

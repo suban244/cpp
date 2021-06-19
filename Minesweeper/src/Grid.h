@@ -17,7 +17,7 @@ public:
   ~Grid();
 
   void init(int difficulty);
-  void construct();
+  void construct(int x, int y);
   void generateTexture();
 
   void render();
@@ -39,4 +39,6 @@ private:
   bool isConstructed;
   SDL_Texture *numTexture[10];
   SDL_Texture *texture;
+
+  int gridStartPosX, gridStartPosY;
 };

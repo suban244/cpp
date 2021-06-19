@@ -7,6 +7,7 @@
 Grid::Grid(int width, int height) {
   gameHeight = height;
   gameWidth = width;
+  isConstructed = false;
 }
 
 void Grid::init(int difficulty) {
@@ -43,10 +44,12 @@ void Grid::init(int difficulty) {
       blocks[i][j] = 0;
     }
   }
-  construct();
+
+  gridStartPosY = gameHeight / 2 - (blockWidth * heightCount / 2);
+  gridStartPosX = gameWidth / 2 - (blockWidth * widthCount / 2);
 }
 
-void Grid::construct() {
+void Grid::construct(int x, int y) {
   int count = bombCount;
   int i, j;
   std::srand(time(NULL));
@@ -54,6 +57,12 @@ void Grid::construct() {
   while (count != 0) {
     i = rand() % heightCount;
     j = rand() % widthCount;
+
+    // Why THE FUCK DO i and x not point in the same direction
+    if (j >= (x - 2) && j <= (x + 2) && i >= (y - 2) && i <= (y + 2)) {
+      // When we are about to place a mine at/around starting position.
+      continue;
+    }
 
     if (blocks[i][j] == MINE) {
       continue;
@@ -171,6 +180,7 @@ void Grid::construct() {
     }
   }
   generateTexture();
+  isConstructed = true;
 }
 
 void Grid::generateTexture() {
@@ -181,8 +191,6 @@ void Grid::generateTexture() {
 
 void Grid::update() {}
 void Grid::render() {
-  int startPosY = gameHeight / 2 - (blockWidth * heightCount / 2);
-  int startPosX = gameWidth / 2 - (blockWidth * widthCount / 2);
 
   SDL_Rect tempRect;
   tempRect.w = blockWidth - 2;
@@ -190,8 +198,8 @@ void Grid::render() {
   SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, 0);
   for (int i = 0; i < heightCount; i++) {
     for (int j = 0; j < widthCount; j++) {
-      tempRect.x = startPosX + blockWidth * j;
-      tempRect.y = startPosY + blockWidth * i;
+      tempRect.x = gridStartPosX + blockWidth * j;
+      tempRect.y = gridStartPosY + blockWidth * i;
       SDL_RenderFillRect(Game::renderer, &tempRect);
       SDL_RenderCopy(Game::renderer, numTexture[blocks[i][j]], NULL, &tempRect);
     }
@@ -199,14 +207,22 @@ void Grid::render() {
 }
 
 void Grid::handleMouseClick(SDL_Event event) {
-  // int x = event.button.x;
-  // int y = event.button.y;
+  int x = (event.button.x - gridStartPosX) / blockWidth;
+  int y = (event.button.y - gridStartPosY) / blockWidth;
+
+  std::cout << x << ", " << y << std::endl;
 
   if (event.button.button == SDL_BUTTON_LEFT) {
-    std::cout << "Left";
+    if (constructed()) {
+      // do the popping this.
+    } else {
+      // Construct
+      construct(x, y);
+    }
   }
 }
 
+bool Grid::constructed() { return isConstructed; }
 Grid::~Grid() {
   for (int i = 0; i < heightCount; i++) {
     delete[] blocks[i];
