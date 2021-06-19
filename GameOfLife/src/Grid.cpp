@@ -144,6 +144,8 @@ void Grid::flipBlock(int i, int j) {
 }
 
 Grid::~Grid() {
-  free(arr);
-  free(new_arr);
+  for (int i = 0; i < height; i++) {
+    delete[] arr[i];
+    delete[] new_arr[i];
+  }
 }
