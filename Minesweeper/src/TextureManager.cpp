@@ -20,3 +20,12 @@ SDL_Texture *TextureManager::LoadGridValue(int value) {
 
   return Message;
 }
+
+SDL_Texture *TextureManager::loadTexture(const char *filename) {
+  SDL_Surface *tempSurface = IMG_Load(filename);
+  SDL_Texture *tex = SDL_CreateTextureFromSurface(Game::renderer, tempSurface);
+
+  SDL_FreeSurface(tempSurface);
+
+  return tex;
+}

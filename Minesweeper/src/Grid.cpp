@@ -38,10 +38,13 @@ void Grid::init(int difficulty) {
   }
 
   blocks = new int *[heightCount];
+  blockStates = new int *[heightCount];
   for (int i = 0; i < heightCount; i++) {
     blocks[i] = new int[widthCount];
+    blockStates[i] = new int[widthCount];
     for (int j = 0; j < widthCount; j++) {
       blocks[i][j] = 0;
+      blockStates[i][j] = HIDDEN;
     }
   }
 
@@ -181,12 +184,14 @@ void Grid::construct(int x, int y) {
   }
   generateTexture();
   isConstructed = true;
+  pop(y, x);
 }
 
 void Grid::generateTexture() {
   for (int i = 0; i < 10; i++) {
     numTexture[i] = TextureManager::LoadGridValue(i);
   }
+  flagTexture = TextureManager::loadTexture("assets/flag.png");
 }
 
 void Grid::update() {}
@@ -200,8 +205,24 @@ void Grid::render() {
     for (int j = 0; j < widthCount; j++) {
       tempRect.x = gridStartPosX + blockWidth * j;
       tempRect.y = gridStartPosY + blockWidth * i;
-      SDL_RenderFillRect(Game::renderer, &tempRect);
-      SDL_RenderCopy(Game::renderer, numTexture[blocks[i][j]], NULL, &tempRect);
+
+      switch (blockStates[i][j]) {
+      case HIDDEN:
+        SDL_SetRenderDrawColor(Game::renderer, 200, 200, 200, 255);
+        SDL_RenderFillRect(Game::renderer, &tempRect);
+        break;
+
+      case POPED:
+        SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, 0);
+        SDL_RenderFillRect(Game::renderer, &tempRect);
+        SDL_RenderCopy(Game::renderer, numTexture[blocks[i][j]], NULL,
+                       &tempRect);
+        break;
+      case FLAGED:
+        SDL_SetRenderDrawColor(Game::renderer, 200, 200, 200, 255);
+        SDL_RenderFillRect(Game::renderer, &tempRect);
+        SDL_RenderCopy(Game::renderer, flagTexture, NULL, &tempRect);
+      }
     }
   }
 }
@@ -215,10 +236,14 @@ void Grid::handleMouseClick(SDL_Event event) {
   if (event.button.button == SDL_BUTTON_LEFT) {
     if (constructed()) {
       // do the popping this.
+      if (blockStates[y][x] == HIDDEN)
+        pop(y, x);
     } else {
       // Construct
       construct(x, y);
     }
+  } else if (event.button.button == SDL_BUTTON_RIGHT) {
+    flag(y, x);
   }
 }
 
@@ -226,5 +251,35 @@ bool Grid::constructed() { return isConstructed; }
 Grid::~Grid() {
   for (int i = 0; i < heightCount; i++) {
     delete[] blocks[i];
+  }
+}
+
+void Grid::flag(int i, int j) {
+  // i is the y coordinate, j is the x coordinate
+  switch (blockStates[i][j]) {
+  case HIDDEN:
+    blockStates[i][j] = FLAGED;
+    break;
+  case FLAGED:
+    blockStates[i][j] = HIDDEN;
+    break;
+  default:
+    break;
+  }
+}
+
+void Grid::pop(int i, int j) {
+  blockStates[i][j] = POPED;
+  if (blocks[i][j] == 0) {
+    for (int k = i - 1; k <= i + 1; k++) {
+      for (int l = j - 1; l <= j + 1; l++) {
+        if (k < 0 || k > heightCount - 1 || l < 0 || l > widthCount - 1) {
+          continue;
+        } else {
+          if (blockStates[k][l] == HIDDEN)
+            pop(k, l);
+        }
+      }
+    }
   }
 }

@@ -8,6 +8,9 @@
 #define EASY_DIFFICULTY 1
 #define MEDIUM_DIFFICULTY 2
 #define HARD_DIFFICULTY 3
+#define HIDDEN 0
+#define POPED 1
+#define FLAGED 2
 
 #define MINE 9
 
@@ -19,6 +22,8 @@ public:
   void init(int difficulty);
   void construct(int x, int y);
   void generateTexture();
+  void pop(int i, int j);
+  void flag(int i, int j);
 
   void render();
   void update();
@@ -28,6 +33,7 @@ public:
   void handleMouseClick(SDL_Event event);
 
 private:
+  int **blockStates;
   int **blocks;
   int blockWidth;
   int widthCount;
@@ -39,6 +45,7 @@ private:
   bool isConstructed;
   SDL_Texture *numTexture[10];
   SDL_Texture *texture;
+  SDL_Texture *flagTexture;
 
   int gridStartPosX, gridStartPosY;
 };
