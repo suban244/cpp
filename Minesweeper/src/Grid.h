@@ -39,15 +39,17 @@ private:
   int widthCount;
   int heightCount;
   int bombCount;
+  bool hasStarted = false;
 
   int gameWidth, gameHeight;
 
-  int gameTime;
+  int gameTime = 0;
   int flagCount;
 
   bool isConstructed;
   SDL_Texture *blockTexture[10];
   SDL_Texture *numberTexture[10];
+  SDL_Texture *forwawrdSlashTexture;
   SDL_Texture *texture;
   SDL_Texture *flagTexture;
   SDL_Texture *scoreTexture;

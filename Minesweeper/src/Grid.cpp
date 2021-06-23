@@ -8,9 +8,6 @@ Grid::Grid(int width, int height) {
   gameHeight = height;
   gameWidth = width;
   isConstructed = false;
-
-  scoreTexture = TextureManager::loadSentence("Score");
-  timeTexture = TextureManager::loadSentence("Time");
   generateTexture();
 }
 
@@ -189,10 +186,17 @@ void Grid::construct(int x, int y) {
     }
   }
   isConstructed = true;
+  hasStarted = true;
   pop(y, x);
+  gameTime = 0;
 }
 
 void Grid::generateTexture() {
+
+  scoreTexture = TextureManager::loadSentence("Score");
+  timeTexture = TextureManager::loadSentence("Time");
+  forwawrdSlashTexture = TextureManager::loadSentence("/");
+
   for (int i = 0; i < 10; i++) {
     blockTexture[i] = TextureManager::loadGridValue(i);
     numberTexture[i] = TextureManager::loadNumTexture(i);
@@ -202,10 +206,15 @@ void Grid::generateTexture() {
 
 void Grid::update() {
   static int count = 0;
-  count += 1;
-  if (count > 60) {
-    count = 0;
-    gameTime++;
+  if (hasStarted) {
+    count += 1;
+    if (count > 60) {
+      count = 0;
+      gameTime++;
+    }
+  }
+  if (gameTime > 999) {
+    gameTime = 999;
   }
 }
 void Grid::render() {
@@ -241,7 +250,7 @@ void Grid::render() {
 
   // For Time and Score
   tempRect.w = gameWidth * 0.05;
-  tempRect.h = gameHeight * 0.05;
+  tempRect.h = gameHeight * 0.06;
   tempRect.x = gameWidth * 0.85;
   tempRect.y = gameHeight * 0.1;
 
@@ -252,15 +261,43 @@ void Grid::render() {
   SDL_RenderCopy(Game::renderer, scoreTexture, NULL, &tempRect);
 
   tempRect.y = gameHeight * 0.15;
-  SDL_RenderCopy(Game::renderer, numberTexture[7], NULL, &tempRect);
-  /*
-  tempRect.x = gameWidth * 0.86;
-  SDL_RenderCopy(Game::renderer, numberTexture[(flagCount / 10) % 10], NULL,
+  tempRect.w = gameWidth * 0.015;
+
+  // Render Current time
+  SDL_RenderCopy(Game::renderer, numberTexture[gameTime / 100], NULL,
                  &tempRect);
   tempRect.x = gameWidth * 0.87;
+  SDL_RenderCopy(Game::renderer, numberTexture[(gameTime / 10) % 10], NULL,
+                 &tempRect);
+  tempRect.x = gameWidth * 0.89;
+  SDL_RenderCopy(Game::renderer, numberTexture[gameTime % 10], NULL, &tempRect);
+
+  // Render Flags and Mine count
+  tempRect.y = gameHeight * 0.25;
+
+  tempRect.x = gameWidth * 0.85;
+  SDL_RenderCopy(Game::renderer, numberTexture[flagCount / 100], NULL,
+                 &tempRect);
+  tempRect.x = gameWidth * 0.87;
+  SDL_RenderCopy(Game::renderer, numberTexture[(flagCount / 10) % 10], NULL,
+                 &tempRect);
+  tempRect.x = gameWidth * 0.89;
   SDL_RenderCopy(Game::renderer, numberTexture[flagCount % 10], NULL,
                  &tempRect);
-                 */
+
+  tempRect.x = gameWidth * 0.91;
+  SDL_RenderCopy(Game::renderer, forwawrdSlashTexture, NULL, &tempRect);
+
+  tempRect.x = gameWidth * 0.93;
+  SDL_RenderCopy(Game::renderer, numberTexture[bombCount / 100], NULL,
+                 &tempRect);
+  tempRect.x = gameWidth * 0.95;
+  SDL_RenderCopy(Game::renderer, numberTexture[(bombCount / 10) % 10], NULL,
+                 &tempRect);
+
+  tempRect.x = gameWidth * 0.97;
+  SDL_RenderCopy(Game::renderer, numberTexture[bombCount % 10], NULL,
+                 &tempRect);
 }
 
 void Grid::handleMouseClick(SDL_Event event) {
