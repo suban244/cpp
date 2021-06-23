@@ -8,6 +8,10 @@ Grid::Grid(int width, int height) {
   gameHeight = height;
   gameWidth = width;
   isConstructed = false;
+
+  scoreTexture = TextureManager::loadSentence("Score");
+  timeTexture = TextureManager::loadSentence("Time");
+  generateTexture();
 }
 
 void Grid::init(int difficulty) {
@@ -50,6 +54,8 @@ void Grid::init(int difficulty) {
 
   gridStartPosY = gameHeight / 2 - (blockWidth * heightCount / 2);
   gridStartPosX = gameWidth / 2 - (blockWidth * widthCount / 2);
+
+  flagCount = 0;
 }
 
 void Grid::construct(int x, int y) {
@@ -182,19 +188,26 @@ void Grid::construct(int x, int y) {
       blocks[i][j] = bombCount;
     }
   }
-  generateTexture();
   isConstructed = true;
   pop(y, x);
 }
 
 void Grid::generateTexture() {
   for (int i = 0; i < 10; i++) {
-    numTexture[i] = TextureManager::LoadGridValue(i);
+    blockTexture[i] = TextureManager::loadGridValue(i);
+    numberTexture[i] = TextureManager::loadNumTexture(i);
   }
   flagTexture = TextureManager::loadTexture("assets/flag.png");
 }
 
-void Grid::update() {}
+void Grid::update() {
+  static int count = 0;
+  count += 1;
+  if (count > 60) {
+    count = 0;
+    gameTime++;
+  }
+}
 void Grid::render() {
 
   SDL_Rect tempRect;
@@ -215,7 +228,7 @@ void Grid::render() {
       case POPED:
         SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, 0);
         SDL_RenderFillRect(Game::renderer, &tempRect);
-        SDL_RenderCopy(Game::renderer, numTexture[blocks[i][j]], NULL,
+        SDL_RenderCopy(Game::renderer, blockTexture[blocks[i][j]], NULL,
                        &tempRect);
         break;
       case FLAGED:
@@ -225,6 +238,29 @@ void Grid::render() {
       }
     }
   }
+
+  // For Time and Score
+  tempRect.w = gameWidth * 0.05;
+  tempRect.h = gameHeight * 0.05;
+  tempRect.x = gameWidth * 0.85;
+  tempRect.y = gameHeight * 0.1;
+
+  SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, 0);
+  SDL_RenderCopy(Game::renderer, timeTexture, NULL, &tempRect);
+
+  tempRect.y = gameHeight * 0.2;
+  SDL_RenderCopy(Game::renderer, scoreTexture, NULL, &tempRect);
+
+  tempRect.y = gameHeight * 0.15;
+  SDL_RenderCopy(Game::renderer, numberTexture[7], NULL, &tempRect);
+  /*
+  tempRect.x = gameWidth * 0.86;
+  SDL_RenderCopy(Game::renderer, numberTexture[(flagCount / 10) % 10], NULL,
+                 &tempRect);
+  tempRect.x = gameWidth * 0.87;
+  SDL_RenderCopy(Game::renderer, numberTexture[flagCount % 10], NULL,
+                 &tempRect);
+                 */
 }
 
 void Grid::handleMouseClick(SDL_Event event) {
@@ -259,9 +295,11 @@ void Grid::flag(int i, int j) {
   switch (blockStates[i][j]) {
   case HIDDEN:
     blockStates[i][j] = FLAGED;
+    flagCount++;
     break;
   case FLAGED:
     blockStates[i][j] = HIDDEN;
+    flagCount--;
     break;
   default:
     break;

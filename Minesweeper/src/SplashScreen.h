@@ -23,4 +23,6 @@ private:
   SDL_Rect easy, medium, hard;
   int difficulty;
   bool isSelected;
+  SDL_Texture *chooseDifficultyTexture;
+  int gameWidth, gameHeight;
 };

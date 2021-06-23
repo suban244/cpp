@@ -42,10 +42,16 @@ private:
 
   int gameWidth, gameHeight;
 
+  int gameTime;
+  int flagCount;
+
   bool isConstructed;
-  SDL_Texture *numTexture[10];
+  SDL_Texture *blockTexture[10];
+  SDL_Texture *numberTexture[10];
   SDL_Texture *texture;
   SDL_Texture *flagTexture;
+  SDL_Texture *scoreTexture;
+  SDL_Texture *timeTexture;
 
   int gridStartPosX, gridStartPosY;
 };
