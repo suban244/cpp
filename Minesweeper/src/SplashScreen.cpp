@@ -12,6 +12,14 @@ SplashScreen::SplashScreen(int width, int height) {
   medium.x = width / 2 - medium.w / 2;
   hard.x = width / 2 + width / 5 - hard.w / 2;
 
+  easyText.w = mediumText.w = hardText.w = width / 15;
+  easyText.h = mediumText.h = hardText.h = easy.h / 2;
+  easyText.y = mediumText.y = hardText.y = height * 0.5 + easy.h * 0.25;
+
+  easyText.x = easy.x + easy.w * 0.1;
+  mediumText.x = medium.x + medium.w * 0.1;
+  hardText.x = hard.x + hard.w * 0.1;
+
   isSelected = false;
   difficulty = MEDIUM_DIFFICULTY;
   chooseDifficultyTexture = TextureManager::loadSentence("Choose Difficulty");
@@ -19,6 +27,9 @@ SplashScreen::SplashScreen(int width, int height) {
   gameLostTexture = TextureManager::loadSentence("GG! Nice try");
 
   type = SPLASH_SCREEN_WELCOME;
+  difficultyTexture[0] = TextureManager::loadSentence("Easy");
+  difficultyTexture[1] = TextureManager::loadSentence("Medium");
+  difficultyTexture[2] = TextureManager::loadSentence("Hard");
 }
 
 void SplashScreen::render() {
@@ -26,6 +37,9 @@ void SplashScreen::render() {
   SDL_RenderDrawRect(Game::renderer, &easy);
   SDL_RenderDrawRect(Game::renderer, &medium);
   SDL_RenderDrawRect(Game::renderer, &hard);
+  SDL_RenderCopy(Game::renderer, difficultyTexture[0], NULL, &easyText);
+  SDL_RenderCopy(Game::renderer, difficultyTexture[1], NULL, &mediumText);
+  SDL_RenderCopy(Game::renderer, difficultyTexture[2], NULL, &hardText);
 
   SDL_Rect tempRect;
   tempRect.w = gameWidth * 0.2;

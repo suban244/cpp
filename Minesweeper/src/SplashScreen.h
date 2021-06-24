@@ -27,6 +27,7 @@ public:
 
 private:
   SDL_Rect easy, medium, hard;
+  SDL_Rect easyText, mediumText, hardText;
   int difficulty;
   bool isSelected;
   int type;
@@ -34,5 +35,6 @@ private:
   SDL_Texture *chooseDifficultyTexture;
   SDL_Texture *gameWonTexture;
   SDL_Texture *gameLostTexture;
+  SDL_Texture *difficultyTexture[3];
   int gameWidth, gameHeight;
 };
