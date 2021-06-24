@@ -1,4 +1,4 @@
-#Minesweeper
+# Minesweeper
 
 A minesweeper clone made using SDL2.
 

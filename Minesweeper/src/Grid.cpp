@@ -53,6 +53,7 @@ void Grid::init(int difficulty) {
   gridStartPosX = gameWidth / 2 - (blockWidth * widthCount / 2);
 
   flagCount = 0;
+  gameOver = 0;
 }
 
 void Grid::construct(int x, int y) {
@@ -189,6 +190,7 @@ void Grid::construct(int x, int y) {
   hasStarted = true;
   pop(y, x);
   gameTime = 0;
+  pauseTime = 3 * 60;
 }
 
 void Grid::generateTexture() {
@@ -206,6 +208,30 @@ void Grid::generateTexture() {
 
 void Grid::update() {
   static int count = 0;
+
+  // Check for GAME won
+  if (flagCount == bombCount) {
+    bool allCorrect = true;
+    for (int i = 0; i < heightCount; i++) {
+      for (int j = 0; j < widthCount; j++) {
+        if (blocks[i][j] == MINE && blockStates[i][j] != FLAGED) {
+          allCorrect = false;
+        }
+        if (blockStates[i][j] == HIDDEN) {
+          allCorrect = false;
+        }
+      }
+    }
+    if (allCorrect) {
+      gameOver = GRID_WON;
+    }
+  }
+
+  if (gameOver != 0) {
+    pauseTime--;
+    return;
+  }
+
   if (hasStarted) {
     count += 1;
     if (count > 60) {
@@ -306,6 +332,10 @@ void Grid::handleMouseClick(SDL_Event event) {
 
   std::cout << x << ", " << y << std::endl;
 
+  if (gameOver != 0) {
+    return;
+  }
+
   if (event.button.button == SDL_BUTTON_LEFT) {
     if (constructed()) {
       // do the popping this.
@@ -345,6 +375,10 @@ void Grid::flag(int i, int j) {
 
 void Grid::pop(int i, int j) {
   blockStates[i][j] = POPED;
+  if (blocks[i][j] == MINE) {
+    gameOver = GRID_LOST;
+    return;
+  }
   if (blocks[i][j] == 0) {
     for (int k = i - 1; k <= i + 1; k++) {
       for (int l = j - 1; l <= j + 1; l++) {
@@ -358,3 +392,15 @@ void Grid::pop(int i, int j) {
     }
   }
 }
+
+bool Grid::changeToEndScreen() {
+  if (pauseTime < 0) {
+    hasStarted = false;
+    pauseTime = 3 * 180;
+    isConstructed = false;
+    return true;
+  } else
+    return false;
+}
+
+int Grid::getGameOverState() { return gameOver; }

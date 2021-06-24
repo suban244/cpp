@@ -15,6 +15,10 @@ SplashScreen::SplashScreen(int width, int height) {
   isSelected = false;
   difficulty = MEDIUM_DIFFICULTY;
   chooseDifficultyTexture = TextureManager::loadSentence("Choose Difficulty");
+  gameWonTexture = TextureManager::loadSentence("GG! You won");
+  gameLostTexture = TextureManager::loadSentence("GG! Nice try");
+
+  type = SPLASH_SCREEN_WELCOME;
 }
 
 void SplashScreen::render() {
@@ -28,7 +32,12 @@ void SplashScreen::render() {
   tempRect.h = gameHeight * 0.05;
   tempRect.x = gameWidth * 0.4;
   tempRect.y = gameHeight * 0.3;
-  SDL_RenderCopy(Game::renderer, chooseDifficultyTexture, NULL, &tempRect);
+  if (type == SPLASH_SCREEN_WELCOME)
+    SDL_RenderCopy(Game::renderer, chooseDifficultyTexture, NULL, &tempRect);
+  else if (type == SPLASH_SCREEN_WON)
+    SDL_RenderCopy(Game::renderer, gameWonTexture, NULL, &tempRect);
+  else if (type == SPLASH_SCREEN_LOST)
+    SDL_RenderCopy(Game::renderer, gameLostTexture, NULL, &tempRect);
 }
 
 bool SplashScreen::selected() { return isSelected; }
@@ -57,4 +66,9 @@ int SplashScreen::handleMouseClick(SDL_Event event) {
     return HARD_DIFFICULTY;
   }
   return 0;
+}
+
+void SplashScreen::setGameOverScreen(int type) {
+  this->type = type;
+  isSelected = false;
 }

@@ -12,6 +12,9 @@
 #define POPED 1
 #define FLAGED 2
 
+#define GRID_WON 1
+#define GRID_LOST 2
+
 #define MINE 9
 
 class Grid {
@@ -32,6 +35,9 @@ public:
 
   void handleMouseClick(SDL_Event event);
 
+  bool changeToEndScreen();
+  int getGameOverState();
+
 private:
   int **blockStates;
   int **blocks;
@@ -40,11 +46,13 @@ private:
   int heightCount;
   int bombCount;
   bool hasStarted = false;
+  int gameOver = 0;
 
   int gameWidth, gameHeight;
 
   int gameTime = 0;
   int flagCount;
+  int pauseTime = 3 * 60;
 
   bool isConstructed;
   SDL_Texture *blockTexture[10];

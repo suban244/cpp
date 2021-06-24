@@ -4,6 +4,10 @@
 #include "Grid.h"
 #include <SDL2/SDL.h>
 
+#define SPLASH_SCREEN_WELCOME 0
+#define SPLASH_SCREEN_WON 1
+#define SPLASH_SCREEN_LOST 2
+
 class SplashScreen {
 public:
   SplashScreen(int width, int height);
@@ -17,12 +21,18 @@ public:
   int getDifficulty();
   int setDifficulty();
 
+  void setGameOverScreen(int type);
+
   int handleMouseClick(SDL_Event event);
 
 private:
   SDL_Rect easy, medium, hard;
   int difficulty;
   bool isSelected;
+  int type;
+
   SDL_Texture *chooseDifficultyTexture;
+  SDL_Texture *gameWonTexture;
+  SDL_Texture *gameLostTexture;
   int gameWidth, gameHeight;
 };

@@ -39,6 +39,11 @@ void Game::update() {
   if (hasStarted) {
     // Show the Game
     grid->update();
+    if (grid->changeToEndScreen()) {
+      hasStarted = false;
+      int state = grid->getGameOverState();
+      splashScreen->setGameOverScreen(state);
+    }
   } else {
     // The menu
     if (splashScreen->selected()) {
