@@ -24,6 +24,10 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height) {
     std::cout << "Failed to initialize SDL" << std::endl;
     exit(-1);
   }
+  if (TTF_Init() == -1) {
+    std::cout << "Failed to initallize ttf" << std::endl;
+    exit(-1);
+  }
   isRunning = true;
   hasStarted = false;
 
@@ -106,4 +110,5 @@ void Game::clean() {
   SDL_DestroyWindow(window);
   SDL_DestroyRenderer(renderer);
   SDL_Quit();
+  TTF_Quit();
 }

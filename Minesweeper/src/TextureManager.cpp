@@ -5,7 +5,6 @@ void TextureManager::Draw(SDL_Texture *texture, SDL_Rect src, SDL_Rect dest) {
 }
 
 SDL_Texture *TextureManager::loadGridValue(int value) {
-  TTF_Init();
   TTF_Font *Roboto = TTF_OpenFont("Roboto.ttf", 48);
   SDL_Color White = {0, 0, 0, 255};
 
@@ -23,7 +22,6 @@ SDL_Texture *TextureManager::loadGridValue(int value) {
 }
 
 SDL_Texture *TextureManager::loadSentence(const char *sentence) {
-  TTF_Init();
   TTF_Font *Roboto = TTF_OpenFont("Roboto.ttf", 48);
   SDL_Color White = {255, 255, 255, 0};
 
@@ -45,7 +43,6 @@ SDL_Texture *TextureManager::loadTexture(const char *filename) {
 }
 
 SDL_Texture *TextureManager::loadNumTexture(int n) {
-  TTF_Init();
   TTF_Font *Roboto = TTF_OpenFont("Roboto.ttf", 48);
   SDL_Color White = {255, 255, 255, 0};
 

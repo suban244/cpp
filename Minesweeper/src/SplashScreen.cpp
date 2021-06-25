@@ -33,10 +33,13 @@ SplashScreen::SplashScreen(int width, int height) {
 }
 
 void SplashScreen::render() {
+  SDL_SetRenderDrawColor(Game::renderer, 0, 128, 0, 0);
+  SDL_RenderFillRect(Game::renderer, &easy);
+  SDL_SetRenderDrawColor(Game::renderer, 200, 200, 0, 0);
+  SDL_RenderFillRect(Game::renderer, &medium);
+  SDL_SetRenderDrawColor(Game::renderer, 255, 0, 0, 0);
+  SDL_RenderFillRect(Game::renderer, &hard);
   SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, 0);
-  SDL_RenderDrawRect(Game::renderer, &easy);
-  SDL_RenderDrawRect(Game::renderer, &medium);
-  SDL_RenderDrawRect(Game::renderer, &hard);
   SDL_RenderCopy(Game::renderer, difficultyTexture[0], NULL, &easyText);
   SDL_RenderCopy(Game::renderer, difficultyTexture[1], NULL, &mediumText);
   SDL_RenderCopy(Game::renderer, difficultyTexture[2], NULL, &hardText);
