@@ -3,12 +3,12 @@
 #include <random>
 #include <time.h>
 
-#define SORT_SIZE 50
+#define SORT_SIZE 200
 #define RAND_HEIGHT 100
 #define WINDOW_HEIGHT 720
 #define WINDOW_WIDTH 1280
 #define CHECK_TIME 2
-#define FPS_VALUE 120
+#define FPS_VALUE 10000
 
 struct sortInfo {
   bool end;
@@ -88,8 +88,6 @@ int main() {
           if (!info.end) {
             if (info.swap) {
               colorInfo = {true, info.i, info.j};
-
-              std::cout << "Swarping business" << std::endl;
             } else {
               colorInfo = {true, info.i, info.j};
             }
@@ -100,7 +98,6 @@ int main() {
         if ((count + CHECK_TIME / 2) % CHECK_TIME == 0) {
           if (info.swap) {
 
-            std::cout << "Swaing rectangels" << std::endl;
             int x;
             x = rect[info.i]->x;
             rect[info.i]->x = rect[info.j]->x;
@@ -119,7 +116,11 @@ int main() {
         for (int i = 0; i < SORT_SIZE; i++) {
           SDL_RenderFillRect(renderer, rect[i]);
           if (colorInfo.color) {
-            if (i == colorInfo.i || i == colorInfo.j) {
+            if (i == colorInfo.i) {
+              SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+              SDL_RenderFillRect(renderer, rect[i]);
+              SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+            } else if (i == colorInfo.j) {
               SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
               SDL_RenderFillRect(renderer, rect[i]);
               SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -148,19 +149,19 @@ int main() {
 
 sortInfo stepSort(int n[], int length) {
   static int i = 0;
-  static int j = 0;
+  static int j = i;
   static sortInfo info = {false, false, 0, 0};
   int temp;
 
   if (j >= length) {
     i++;
-    j = 0;
+    j = i;
   }
   if (i >= length) {
     info = {true, false, 0, 0};
     return info;
   }
-  if (n[i] < n[j]) {
+  if (n[i] > n[j]) {
     temp = n[i];
     n[i] = n[j];
     n[j] = temp;
