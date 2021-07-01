@@ -89,3 +89,11 @@ void SplashScreen::setGameOverScreen(int type) {
   this->type = type;
   isSelected = false;
 }
+SplashScreen::~SplashScreen() {
+  SDL_DestroyTexture(chooseDifficultyTexture);
+  SDL_DestroyTexture(gameLostTexture);
+  SDL_DestroyTexture(gameWonTexture);
+  SDL_DestroyTexture(difficultyTexture[0]);
+  SDL_DestroyTexture(difficultyTexture[1]);
+  SDL_DestroyTexture(difficultyTexture[2]);
+}

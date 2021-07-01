@@ -28,6 +28,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height) {
     std::cout << "Failed to initallize ttf" << std::endl;
     exit(-1);
   }
+
   isRunning = true;
   hasStarted = false;
 
@@ -51,7 +52,7 @@ void Game::update() {
   } else {
     // The menu
     if (splashScreen->selected()) {
-      this->setHasStarted(true);
+      hasStarted = true;
     }
   }
 }
@@ -86,7 +87,7 @@ void Game::handleEvents() {
       if (success) {
         if (success == 1 || success == 2 || success == 3) {
           grid->init(success);
-          setHasStarted(true);
+          hasStarted = true;
         }
       }
     } else {
@@ -104,7 +105,6 @@ void Game::handleEvents() {
 }
 
 void Game::changeState() { this->hasStarted = !hasStarted; }
-void Game::setHasStarted(bool state) { this->hasStarted = state; }
 
 void Game::clean() {
   SDL_DestroyWindow(window);

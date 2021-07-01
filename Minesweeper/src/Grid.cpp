@@ -351,11 +351,6 @@ void Grid::handleMouseClick(SDL_Event event) {
 }
 
 bool Grid::constructed() { return isConstructed; }
-Grid::~Grid() {
-  for (int i = 0; i < heightCount; i++) {
-    delete[] blocks[i];
-  }
-}
 
 void Grid::flag(int i, int j) {
   // i is the y coordinate, j is the x coordinate
@@ -404,3 +399,18 @@ bool Grid::changeToEndScreen() {
 }
 
 int Grid::getGameOverState() { return gameOver; }
+
+Grid::~Grid() {
+  for (int i = 0; i < heightCount; i++) {
+    delete[] blocks[i];
+    delete[] blockStates[i];
+  }
+  for (int i = 0; i < 10; i++) {
+    SDL_DestroyTexture(blockTexture[i]);
+    SDL_DestroyTexture(numberTexture[i]);
+  }
+  SDL_DestroyTexture(flagTexture);
+  SDL_DestroyTexture(scoreTexture);
+  SDL_DestroyTexture(forwawrdSlashTexture);
+  SDL_DestroyTexture(timeTexture);
+}

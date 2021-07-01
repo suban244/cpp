@@ -58,7 +58,6 @@ private:
   SDL_Texture *blockTexture[10];
   SDL_Texture *numberTexture[10];
   SDL_Texture *forwawrdSlashTexture;
-  SDL_Texture *texture;
   SDL_Texture *flagTexture;
   SDL_Texture *scoreTexture;
   SDL_Texture *timeTexture;
