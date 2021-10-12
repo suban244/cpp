@@ -1,10 +1,14 @@
 #include "Game.h"
+#include "InputHandeler.h"
+#include "Paddle.h"
 
 Game::Game() {}
 
 Game::~Game() {}
 
 SDL_Renderer *Game::renderer = nullptr;
+
+Paddle *paddle = nullptr;
 
 void Game::init(const char *title, int xpos, int ypos, int width, int height) {
   if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
@@ -23,11 +27,16 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height) {
     exit(-1);
   }
   isRunning = true;
+
+  paddle = new Paddle("assets/paddle.png", 0.9 * width, 0.5 * height);
 }
 
 bool Game::running() { return isRunning; }
 
-void Game::update() { count++; }
+void Game::update() {
+  count++;
+  paddle->update();
+}
 
 void Game::render() {
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -35,6 +44,7 @@ void Game::render() {
 
   // TODO
   // ball->printMovement();
+  paddle->render();
 
   SDL_RenderPresent(renderer);
 }
@@ -53,10 +63,12 @@ void Game::handleEvents() {
     // do stuff
     // event.key.keysym.sym gets us the ascii value
     std::cout << event.key.keysym.sym << std::endl;
+    InputHandeler::handleKeyDown(event.key.keysym.sym, paddle);
     break;
 
   case SDL_KEYUP:
     // do stuff
+    InputHandeler::handleKeyUp(event.key.keysym.sym, paddle);
     break;
 
   default:

@@ -3,7 +3,7 @@
 #include <random>
 #include <time.h>
 
-#define SORT_SIZE 200
+#define SORT_SIZE 500
 #define RAND_HEIGHT 100
 #define WINDOW_HEIGHT 720
 #define WINDOW_WIDTH 1280

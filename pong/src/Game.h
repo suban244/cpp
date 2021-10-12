@@ -1,8 +1,10 @@
 #pragma once
-#include "InputHandeler.h"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>
+#define GAME_HEIGHT 640
+#define GAME_WIDTH 800
 
 class Game {
 public:

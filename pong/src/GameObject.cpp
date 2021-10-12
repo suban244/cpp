@@ -9,14 +9,16 @@ GameObject::GameObject(const char *texturesheet, int x, int y) {
   destRect.w = srcRect.w;
   destRect.h = srcRect.h;
 
+  destRect.y = destRect.x = 0;
+
   objTexture = TextureManager::LoadTexture(texturesheet);
 }
 
 GameObject::~GameObject() {}
 
 void GameObject::update() {
-  destRect.x = xpos;
-  destRect.y = ypos;
+  destRect.x = xpos - destRect.w / 2;
+  destRect.y = ypos - destRect.h / 2;
 }
 
 void GameObject::render() {
