@@ -15,7 +15,7 @@ include_directories(lib/include)
 include_directories(lib/glad)
 
 
-add_executable(opengl-cmake-test src/main.cpp src/Shader.cpp src/Shader.h lib/src/glad.c)
+add_executable(opengl-cmake-test src/main.cpp src/Shader.cpp src/Shader.h src/Camera.cpp src/Camera.h lib/src/glad.c)
 
 target_link_libraries(opengl-cmake-test glfw glm)
 
